@@ -8,7 +8,7 @@ os.environ.setdefault('DB_PUBLIC_PASSWORD', 'test_public_password')
 os.environ.setdefault('OMAHA_SERVER_PRIVATE', 'True')
 
 from .settings import *
-
+DB_PUBLIC_ROLE = os.environ.get('DB_PUBLIC_ROLE', 'test_public_users')
 
 DATABASES = {
     'default': {
@@ -18,11 +18,6 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD', ''),
         'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
         'PORT': os.environ.get('DB_PORT', '5432'),
-        'CONN_MAX_AGE': 60,
-        'TEST': {
-            'USER': os.environ.get('DB_PUBLIC_USER', 'postgres'),
-            'PASSWORD': os.environ.get('DB_PUBLIC_PASSWORD', ''),
-        }
     }
 }
 
@@ -33,13 +28,14 @@ INSTALLED_APPS += (
     'django_nose',
 )
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+TEST_RUNNER = 'omaha_server.runner.PublicPrivateNoseTestSuiteRunner'
 
 NOSE_ARGS = [
     '--with-coverage',
     '--cover-package=omaha_server,omaha,crash,feedback,sparkle,healthcheck',
     '--cover-inclusive',
     '--nologcapture',
+    '-s',
 ]
 
 # Tricks to speed up Django tests
@@ -75,3 +71,6 @@ CRASH_SYMBOLS_PATH = os.path.join(BASE_DIR, 'crash', 'tests', 'testdata', 'symbo
 CRASH_S3_MOUNT_PATH = os.path.join(BASE_DIR, 'crash', 'tests', 'testdata')
 
 RAVEN_DSN_STACKTRACE = 'http://c5dc6f5ab74b4ab8a567f545b00cb138:c57ee00766cf497da102b7a83d731840@127.0.0.1/1'
+AWS_STORAGE_BUCKET_NAME = 'test'
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''

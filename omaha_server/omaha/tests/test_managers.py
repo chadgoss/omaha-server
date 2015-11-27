@@ -44,3 +44,9 @@ class VersionManagerTest(TestCase):
         self.assertEqual(Version.objects.filter_by_enabled().count(), 1)
         self.assertIn(version, Version.objects.filter_by_enabled())
         self.assertNotIn(version_disabled, Version.objects.filter_by_enabled())
+
+    def test_get_size(self):
+        file_size = 42
+        VersionFactory.create_batch(10, file_size=file_size)
+        size = Version.objects.get_size()
+        self.assertEqual(size, file_size*10)
