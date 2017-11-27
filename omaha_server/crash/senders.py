@@ -53,6 +53,7 @@ class ELKSender(BaseSender):
             logger = self._prepare_logger()
             extra.update(tags)
             extra.update(data)
+            extra.update({'logger_name': 'omahaserver'})
             logger.info(message, extra=extra)
         else:
             logging.error("Logstash settings are not configured")
