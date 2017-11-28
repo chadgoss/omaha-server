@@ -28,7 +28,7 @@ class SentrySender(BaseSender):
     def send(self, message, extra={}, tags={}, data={}, crash_obj=None):
         event_id = self.client.capture(
             'raven.events.Message',
-            message=message,
+            message='chad ' + message,
             extra=extra,
             tags=tags,
             data=data
